@@ -31,12 +31,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MD_CTLQT CTL_T(KC_QUOT)
 #define MD_GUIQ GUI_T(KC_Q)
 
+enum custom_keycodes {
+  MD_REVMINS = SAFE_RANGE,
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_PDVORAK] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_TAB, KC_SCLN, KC_COMM,  KC_DOT,    KC_P,    KC_Y,                         KC_F,    KC_G,    KC_C,    KC_R,   KC_L, KC_SLSH,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-    MD_DIRESC,    KC_A,    KC_O,    KC_E,    KC_U,    KC_I,                         KC_D,    KC_H,    KC_T,    KC_N,   KC_S, KC_MINS,
+    MD_DIRESC,    KC_A,    KC_O,    KC_E,    KC_U,    KC_I,                         KC_D,    KC_H,    KC_T,    KC_N,   KC_S, MD_REVMINS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
      KC_LSFT, MD_CTLQT, MD_GUIQ,    KC_J,    KC_K,    KC_X,                         KC_B,    KC_M,    KC_W,    KC_V,   KC_Z, KC_RSFT,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -183,13 +187,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     set_keylog(keycode, record);
 
     // switch minus and underscore
-    if (keycode == KC_MINS) {
+    if (keycode == MD_REVMINS) {
       if (keyboard_report->mods & MOD_BIT(KC_LSFT)) {
         // unregister_key(KC_LSFT);
         // register_key(KC_UNDERSCORE);
         // unregister_key(KC_UNDERSCORE);
         // register_key(KC_LSFT);
+        unregister_mods(KC_LSFT);
         SEND_STRING("-");
+        register_mods(KC_LSFT);
       } else {
         // register_key(KC_UNDERSCORE);
         // unregister_key(KC_UNDERSCORE);
