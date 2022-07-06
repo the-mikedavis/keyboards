@@ -181,6 +181,21 @@ bool oled_task_user(void) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
     set_keylog(keycode, record);
+
+    // switch minus and underscore
+    if (keycode == KC_MINS) {
+      if (keyboard_report->mods & MOD_BIT(KC_LSFT)) {
+        // unregister_key(KC_LSFT);
+        // register_key(KC_UNDERSCORE);
+        // unregister_key(KC_UNDERSCORE);
+        // register_key(KC_LSFT);
+        SEND_STRING("-");
+      } else {
+        // register_key(KC_UNDERSCORE);
+        // unregister_key(KC_UNDERSCORE);
+        SEND_STRING("_");
+      }
+    }
   }
   return true;
 }
