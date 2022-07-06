@@ -188,17 +188,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // switch minus and underscore
     if (keycode == MD_REVMINS) {
-      if (keyboard_report->mods & MOD_BIT(KC_LSFT)) {
-        // unregister_key(KC_LSFT);
-        // register_key(KC_UNDERSCORE);
-        // unregister_key(KC_UNDERSCORE);
-        // register_key(KC_LSFT);
-        unregister_mods(KC_LSFT);
+      if (get_mods() & MOD_MASK_SHIFT) {
+        unregister_code(KC_LSFT);
         SEND_STRING("-");
-        register_mods(KC_LSFT);
+        register_code(KC_LSFT);
       } else {
-        // register_key(KC_UNDERSCORE);
-        // unregister_key(KC_UNDERSCORE);
         SEND_STRING("_");
       }
     }
