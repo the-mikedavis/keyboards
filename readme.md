@@ -64,6 +64,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 ```
 
-See https://github.com/the-mikedavis/qmk_firmware/commit/0211661c057c49c7e3b73d26cf8564d8564dce73.
+See [`0211661`](https://github.com/the-mikedavis/keyboards/commit/0211661c057c49c7e3b73d26cf8564d8564dce73).
 
-This can be done for macos as well: https://github.com/the-mikedavis/qmk_firmware/commit/9778486b473a512b9db20ba8ee14931aba167eb0.
+This can be done for macos as well: [`9778486`](https://github.com/the-mikedavis/keyboards/commit/9778486b473a512b9db20ba8ee14931aba167eb0).
