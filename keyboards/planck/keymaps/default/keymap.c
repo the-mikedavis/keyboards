@@ -28,7 +28,8 @@ enum planck_layers {
   _LOWER,
   _RAISE,
   _PLOVER,
-  _ADJUST
+  _ADJUST,
+  _ADJUST2
 };
 
 enum planck_keycodes {
@@ -97,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
               KC_TAB,  KC_SCLN,        KC_COMM,      KC_DOT,                 KC_P,    KC_Y,    KC_F,               KC_G,      KC_C,    KC_R,    KC_L,    KC_SLSH,
 LT(_PDIRECT, KC_ESC),  KC_A,           KC_O,         KC_E,                   KC_U,    KC_I,    KC_D,               KC_H,      KC_T,    KC_N,    KC_S, MD_REVMINS,
              KC_LSFT,  CTL_T(KC_QUOT), GUI_T(KC_Q),  KC_J,                   KC_K,    KC_X,    KC_B,               KC_M,      KC_W,    KC_V,    KC_Z,    KC_RSFT,
-             KC_LALT,  KC_LCTL,        KC_LALT,      KC_LGUI, LT(_PLOWER,KC_BSPC), KC_BSPC,  KC_SPC, LT(_PRAISE,KC_ENT),   KC_LEFT, KC_DOWN,   KC_UP,    KC_RGHT
+             KC_LALT,  KC_LCTL,        KC_LALT,      KC_LGUI, LT(_PLOWER,KC_BSPC), KC_BSPC,  KC_SPC, LT(_PRAISE,KC_ENT),   KC_RALT, XXXXXXX, XXXXXXX,    XXXXXXX
 ),
 
 /* Lower for programmer's dvorak
@@ -115,7 +116,7 @@ LT(_PDIRECT, KC_ESC),  KC_A,           KC_O,         KC_E,                   KC_
   KC_DLR,  XXXXXXX,  KC_LABK, KC_RABK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_AT,   KC_PIPE,
   KC_AMPR, KC_LBRC,  KC_LCBR, KC_RCBR, KC_LPRN, KC_EQL,  KC_ASTR, KC_RPRN, KC_PLUS, KC_RBRC, KC_EXLM, KC_HASH,
   _______, KC_LCTL,  KC_LGUI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-  _______, _______,  _______, _______, _______, _______, _______, XXXXXXX, _______, _______, _______, _______ 
+  _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ 
 ),
 
 /* Raise for programmer's dvorak
@@ -133,7 +134,7 @@ LT(_PDIRECT, KC_ESC),  KC_A,           KC_O,         KC_E,                   KC_
   KC_TILD, XXXXXXX, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_CIRC, KC_BSLS,
   KC_PERC, KC_7,    KC_5,    KC_3,    KC_1,    KC_9,    KC_0,    KC_2,    KC_4,    KC_6,    KC_8,    KC_GRV, 
   _______, KC_LCTL, KC_LGUI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-  _______, _______, _______, _______, XXXXXXX, _______, _______, _______, _______, _______, _______, _______ 
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ 
 ),
 
 /* Adjust/Swap
@@ -225,6 +226,15 @@ LT(_PDIRECT, KC_ESC),  KC_A,           KC_O,         KC_E,                   KC_
     _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK,  PDVORAK,  PLOVER,  _______,
     _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
+),
+// This is a copy of the adjust layer so that it can be accessed by the programmer
+// dvorak lower/raise combinations. `update_tri_layer_state/4` doesn't work with
+// multiple possible ways to access the state.
+[_ADJUST2] = LAYOUT_planck_grid(
+    _______, RESET,   DEBUG,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD,  RGB_VAI, RGB_VAD, KC_DEL ,
+    _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK,  PDVORAK,  PLOVER,  _______,
+    _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
 )
 
 };
@@ -235,24 +245,27 @@ LT(_PDIRECT, KC_ESC),  KC_A,           KC_O,         KC_E,                   KC_
 #endif
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  // when lower + raise are both held, activate the adjust layer
+  state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  // do the same when in the programmer's dvorak variants of lower/raise
+  state = update_tri_layer_state(state, _PLOWER, _PRAISE, _ADJUST2);
+  return state;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case QWERTY:
       if (record->event.pressed) {
-        print("mode just switched to qwerty and this is a huge string\n");
         set_single_persistent_default_layer(_QWERTY);
       }
       return false;
       break;
-    case COLEMAK:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_COLEMAK);
-      }
-      return false;
-      break;
+    // case COLEMAK:
+    //   if (record->event.pressed) {
+    //     set_single_persistent_default_layer(_COLEMAK);
+    //   }
+    //   return false;
+    //   break;
     case PDVORAK:
       if (record->event.pressed) {
         set_single_persistent_default_layer(_PDVORAK);
