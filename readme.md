@@ -40,7 +40,7 @@ enum custom_keycodes {
 // replace KC_MINUS with REV_MINUS in your keymaps block:
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ...
-}
+};
 
 // implement process_record_user
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
