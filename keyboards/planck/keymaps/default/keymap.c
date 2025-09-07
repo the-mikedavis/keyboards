@@ -116,7 +116,7 @@ LT(_PDIRECT, KC_ESC),  KC_A,           KC_O,         KC_E,                   KC_
   KC_DLR,  XXXXXXX,  KC_LABK, KC_RABK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_AT,   KC_PIPE,
   KC_AMPR, KC_LBRC,  KC_LCBR, KC_RCBR, KC_LPRN, KC_EQL,  KC_ASTR, KC_RPRN, KC_PLUS, KC_RBRC, KC_EXLM, KC_HASH,
   _______, KC_LCTL,  KC_LGUI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-  _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ 
+  _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
 /* Raise for programmer's dvorak
@@ -132,9 +132,9 @@ LT(_PDIRECT, KC_ESC),  KC_A,           KC_O,         KC_E,                   KC_
  */
 [_PRAISE] = LAYOUT_planck_grid(
   KC_TILD, XXXXXXX, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_CIRC, KC_BSLS,
-  KC_PERC, KC_7,    KC_5,    KC_3,    KC_1,    KC_9,    KC_0,    KC_2,    KC_4,    KC_6,    KC_8,    KC_GRV, 
+  KC_PERC, KC_7,    KC_5,    KC_3,    KC_1,    KC_9,    KC_0,    KC_2,    KC_4,    KC_6,    KC_8,    KC_GRV,
   _______, KC_LCTL, KC_LGUI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ 
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
 /* Adjust/Swap
